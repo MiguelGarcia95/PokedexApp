@@ -93,7 +93,11 @@ class App extends Component {
   getEvolution(evolutions) {
     var evolutionsArray = [];
     evolutions.forEach((evolution) => {
-      evolutionsArray.push(evolution.species.name);
+      if (this.state.evolutions[0] != evolution.species.name) {
+        evolutionsArray.push(evolution.species.name);
+      } else {
+        evolutionsArray.push(evolution.evolves_to[0].species.name);
+      }
     });
     this.setState({
       evolutions: evolutionsArray
@@ -133,6 +137,8 @@ class App extends Component {
       this.getPkmnDetails(response.data.flavor_text_entries);
       if (response.data.evolution_chain !== null) {
         this.fetchEvolutions(response.data.evolution_chain.url);
+      } else {
+        this.setState({evolutions: ''})
       }
     }).catch(error => console.log("Error: ", error));
   }
